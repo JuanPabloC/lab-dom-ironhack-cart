@@ -13,17 +13,14 @@ function updateSubtotal(product) {
 }
 
 function calculateAll() {
-  // code in the following two lines is added just for testing purposes.
-  // it runs when only iteration 1 is completed. at later point, it can be removed.
-  const singleProduct = document.querySelector('.product');
-  updateSubtotal(singleProduct);
-  // end of test
-
   // ITERATION 2
-  //... your code goes here
-
+  const products = document.getElementsByClassName('product');
+  let total = 0;
+  for (const product of products) {
+    total += Number(updateSubtotal(product));
+  }
   // ITERATION 3
-  //... your code goes here
+  return (document.querySelector('#total-value span').innerHTML = total);
 }
 
 // ITERATION 4
@@ -31,18 +28,59 @@ function calculateAll() {
 function removeProduct(event) {
   const target = event.currentTarget;
   console.log('The target in remove is:', target);
-  //... your code goes here
+  let tr = target.parentNode.parentNode;
+  let tbody = tr.parentNode;
+
+  tbody.removeChild(tr);
+  calculateAll();
 }
 
 // ITERATION 5
 
-function createProduct() {
-  //... your code goes here
+function createProduct(event) {
+  const tr = event.currentTarget.parentNode.parentNode;
+  const name = tr.querySelector('.create-product input').value;
+  const price = tr.querySelector('input[type=number]').value;
+  const newElement = document.createElement('tr');
+  newElement.className = 'product';
+
+  let newInnerHTML = `<td class="name">
+    <span>${name}</span>
+  </td>
+  <td class="price">$<span>${Number(price).toFixed(2)}</span></td>
+  <td class="quantity">
+    <input type="number" value="0" min="0" placeholder="Quantity" />
+  </td>
+  <td class="subtotal">$<span>0</span></td>
+  <td class="action">
+    <button class="btn btn-remove">Remove</button>
+  </td>`;
+
+  newElement.innerHTML = newInnerHTML;
+  newElement
+    .getElementsByClassName('btn-remove')[0]
+    .addEventListener('click', removeProduct);
+  const body = document.getElementsByTagName('tbody');
+  body[0].appendChild(newElement);
+  clearNewProduct();
+}
+
+function clearNewProduct() {
+  const createProduct = document.getElementsByTagName('tfoot')[0];
+  const inputs = createProduct.getElementsByTagName('input');
+  inputs[0].value = null;
+  inputs[1].value = 0;
 }
 
 window.addEventListener('load', () => {
   const calculatePricesBtn = document.getElementById('calculate');
   calculatePricesBtn.addEventListener('click', calculateAll);
 
-  //... your code goes here
+  const removeButtons = document.getElementsByClassName('btn-remove');
+  for (const btn of removeButtons) {
+    btn.addEventListener('click', removeProduct);
+  }
+
+  const createProductBtn = document.getElementById('create');
+  createProductBtn.addEventListener('click', createProduct);
 });
