@@ -38,12 +38,14 @@ function removeProduct(event) {
 // ITERATION 5
 
 function createProduct(event) {
+  // Crear nuevo producto
   const tr = event.currentTarget.parentNode.parentNode;
   const name = tr.querySelector('.create-product input').value;
   const price = tr.querySelector('input[type=number]').value;
   const newElement = document.createElement('tr');
   newElement.className = 'product';
 
+  //El inner HTML del nuevo producto (tr)
   let newInnerHTML = `<td class="name">
     <span>${name}</span>
   </td>
@@ -56,12 +58,19 @@ function createProduct(event) {
     <button class="btn btn-remove">Remove</button>
   </td>`;
 
+  // se llena el nuevo tr
   newElement.innerHTML = newInnerHTML;
+
+  // se le agrega la funcionalidad de borrar al nuevo boton
   newElement
     .getElementsByClassName('btn-remove')[0]
     .addEventListener('click', removeProduct);
+
+  // se agrega al HTML
   const body = document.getElementsByTagName('tbody');
   body[0].appendChild(newElement);
+
+  // se borran los inputs del Create Product
   clearNewProduct();
 }
 
